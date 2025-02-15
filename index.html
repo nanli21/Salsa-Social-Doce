@@ -29,7 +29,7 @@
             try {
                 const response = await fetch(pipedreamUrl);
                 const data = await response.json();
-                displayData(data.attendees); // Use the correct key from API response
+                displayData(data.attendeeNames);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 document.getElementById('attendees').innerHTML = '<p>Failed to load attendee data.</p>';
@@ -41,13 +41,22 @@
             const attendeesContainer = document.getElementById('attendees');
             attendeesContainer.innerHTML = ''; // Clear previous content
 
-            if (attendeeNames && attendeeNames.length > 0) {
-                attendeeNames.forEach(name => {
-                    const attendeeElement = document.createElement('div');
-                    attendeeElement.className = 'attendee';
-                    attendeeElement.textContent = name;
-                    attendeesContainer.appendChild(attendeeElement);
-                });
+            if (attendeeNames) {
+                // If attendeeNames is a string, convert it to an array
+                if (typeof attendeeNames === 'string') {
+                    attendeeNames = [attendeeNames];
+                }
+
+                if (attendeeNames.length > 0) {
+                    attendeeNames.forEach(name => {
+                        const attendeeElement = document.createElement('div');
+                        attendeeElement.className = 'attendee';
+                        attendeeElement.textContent = name;
+                        attendeesContainer.appendChild(attendeeElement);
+                    });
+                } else {
+                    attendeesContainer.innerHTML = '<p>No attendees found.</p>';
+                }
             } else {
                 attendeesContainer.innerHTML = '<p>No attendees found.</p>';
             }
