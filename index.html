@@ -29,7 +29,7 @@
             try {
                 const response = await fetch(pipedreamUrl);
                 const data = await response.json();
-                displayData(data.attendeeNames);
+                displayData(data.attendees); // Use the correct key from API response
             } catch (error) {
                 console.error('Error fetching data:', error);
                 document.getElementById('attendees').innerHTML = '<p>Failed to load attendee data.</p>';
