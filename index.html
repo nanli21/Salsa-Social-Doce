@@ -3,15 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Attendee List</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Ticket Tailor Attendees</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .attendee {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Live Attendee List</h1>
-    <div id="attendee-list">
-        <!-- The list of attendees will be dynamically displayed here -->
-    </div>
+    <h1>Attendee List</h1>
+    <div id="attendees"></div>
 
-    <script src="app.js"></script>
+    <script>
+        // Replace with your Pipedream endpoint URL
+        const pipedreamUrl = 'https://eo5fww1q7mav10e.m.pipedream.net';
+
+        // Fetch data from Pipedream
+        async function fetchData() {
+            try {
+                const response = await fetch(pipedreamUrl);
+                const data = await response.json();
+                displayData(data.attendeeNames);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('attendees').innerHTML = '<p>Failed to load attendee data.</p>';
+            }
+        }
+
+        // Display the fetched data
+        function displayData(attendeeNames) {
+            const attendeesContainer = document.getElementById('attendees');
+            attendeesContainer.innerHTML = ''; // Clear previous content
+
+            if (attendeeNames && attendeeNames.length > 0) {
+                attendeeNames.forEach(name => {
+                    const attendeeElement = document.createElement('div');
+                    attendeeElement.className = 'attendee';
+                    attendeeElement.textContent = name;
+                    attendeesContainer.appendChild(attendeeElement);
+                });
+            } else {
+                attendeesContainer.innerHTML = '<p>No attendees found.</p>';
+            }
+        }
+
+        // Fetch data when the page loads
+        fetchData();
+    </script>
 </body>
 </html>
